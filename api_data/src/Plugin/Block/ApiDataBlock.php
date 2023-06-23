@@ -30,16 +30,16 @@ class ApiDataBlock extends BlockBase
   public function build()
   {
 
-  //Here we are restricting the data of custom block to administrator role only, if condition is true, it will run you rcode below otherwise it will run the empty array
+    //Here we are restricting the data of custom block to administrator role only, if condition is true, it will run you rcode below otherwise it will run the empty array
 
-  //So currentUser() service is called which implements Account interface class
-  //userroles data->an array of roles associated with the current user account using the getRoles() is retrieved.
-  //The in_array() function is used to check for the presence of the 'administrator' role in  userRoles array.
-  $currentUser = \Drupal::currentUser();
-  $userRoles = $currentUser->getRoles();
-  if (!in_array('administrator', $userRoles)) {
-    return [];
-  }
+    //So currentUser() service is called which implements Account interface class
+    //userroles data->an array of roles associated with the current user account using the getRoles() is retrieved.
+    //The in_array() function is used to check for the presence of the 'administrator' role in  userRoles array.
+    $currentUser = \Drupal::currentUser();
+    $userRoles = $currentUser->getRoles();
+    if (!in_array('administrator', $userRoles)) {
+      return [];
+    }
 
 
 
@@ -47,13 +47,13 @@ class ApiDataBlock extends BlockBase
     $catFactObj = new APIController;
     $factData = $catFactObj->getFact();
     $table = $this->generateTable($factData);
- 
 
 
-   
+
+
 
     return [
-     
+
       '#type' => 'markup',
       '#markup' => $table,
       '#attached' => [
@@ -67,7 +67,7 @@ class ApiDataBlock extends BlockBase
       ],
     ];
 
-  
+
 
 
 
@@ -82,14 +82,15 @@ class ApiDataBlock extends BlockBase
     $table = '<table class="api-data-table">';
 
     // Add the "bpi" fields for USD, GBP, and EUR
-    $table .= '<tr><th class = "table-header" colspan="6">Bitcoin Price Index</th></tr>';
+    $table .= '<tr><th class="table-header" colspan="6">' . $this->t('Bitcoin Price Index') . '</th></tr>';
+
     $table .= '<tr>
-                    <th>Currency</th>
-                    <th>Symbol</th>
-                    <th>Rate</th>
-                    <th>Description</th>
-                    <th>Rate (Float)</th>
-                    <th>Time</th>
+    <th>' . $this->t('Currency') . '</th>
+    <th>' . $this->t('Symbol') . '</th>
+    <th>' . $this->t('Rate') . '</th>
+    <th>' . $this->t('Description') . '</th>
+    <th>' . $this->t('Rate (Float)') . '</th>
+    <th>' . $this->t('Time') . '</th>
               </tr>';
 
     $currencies = ['USD', 'GBP', 'EUR'];
@@ -100,7 +101,7 @@ class ApiDataBlock extends BlockBase
       $table .= '<td class="api-data-cell">' . $currencyData['code'] . '</td>';
       $table .= '<td class="api-data-cell">' . $currencyData['symbol'] . '</td>';
       $table .= '<td class="api-data-cell">' . $currencyData['rate'] . '</td>';
-      $table .= '<td class="api-data-cell">' . $currencyData['description'] . '</td>';
+      $table .= '<td class="api-data-cell">' . $this->t($currencyData['description']) . '</td>';
       $table .= '<td class="api-data-cell">' . $currencyData['rate_float'] . '</td>';
       $table .= '<td class="api-data-cell">' . $factData['time']['updated'] . '</td>';
 
@@ -113,8 +114,3 @@ class ApiDataBlock extends BlockBase
   }
 
 }
-
-
-
-
-
