@@ -26,7 +26,9 @@ class vocabcontroller extends ControllerBase
 
 
 
-    // SORTING FUNCTION
+    // SORTING FUNCTION 
+    //first we store all the 'keys' into key_array and then we sort it into asc order or desc order.
+
     public function sortBy($arr, $key)
     {
         $key_arr = array_column($arr, $key);
@@ -34,37 +36,31 @@ class vocabcontroller extends ControllerBase
         return $arr;
     }   
 
-    
 
+//Function to print the error if wrong path or description is found!
+    public function get_error() {
+            return ['#type' => 'markup',    
+                   '#markup' => t('No records found'),
+               ];
+           }
+
+
+
+
+
+//Default Display() method by drupal to display data
     public function display($vocabid, $listid)
     {
        
-        
-    //Loads all taxonomy data and stores it into $termsdata variable
-        $taxtermsdata = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple();
+    //We are using service getStorage() of entityTypeManager()  to fetch data of specific entity type we want(i.e Here taxonomy_term) and we want to load all the data inside it so 'MUltiple' is used
+     $taxtermsdata = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple();
 
 
-    //TABLE headers array is all heading titles of the resultant table that we are going to have.
-        $table_headers = array(
-            'tid' => 'Term ID',
-            'name' => 'Term Name',
-            'description' => ("Description"),
-            'vocabid' => "Vocabulary Name",
-        );
-        
 
-    //Function to print the description message if no error is found!
-        function get_error() {
-             return ['#type' => 'markup',    
-                    '#markup' => t('No records found'),
-                ];
-            }
 
-          
 
-        
-         //Condition to search for specific termid inside a specific voacbulary
-        if ($listid != NULL && $vocabid != NULL) {
+//Condition to search for specific term inside a specific vocabulary!
+           if ($listid != NULL && $vocabid != NULL) {
 
             foreach ($taxtermsdata as $term) {
                 if ($term->vid->target_id == $vocabid && $term->tid->value == $listid) {
@@ -88,6 +84,7 @@ class vocabcontroller extends ControllerBase
 
 
 
+
        // Search for a specific vocabulary group!  
         else if ($vocabid != NULL) {
             foreach ($taxtermsdata as $term) {
@@ -99,14 +96,8 @@ class vocabcontroller extends ControllerBase
                     'vocabid' => $term->vid->target_id,
                 );
             }
-                
-            //Sorting condition
-            //'sort' is defined by us. that is query parameter.
-            if ($_GET['sort'] != NULL) $term_res = $this->sortBy($term_res, 'name');
-
         
-             
-            if (!$term_res) {
+              if (!$term_res) {
                 return get_error();
               }
 
@@ -116,11 +107,12 @@ class vocabcontroller extends ControllerBase
 
 
 
-        // shows all the vocabulary data
+
+
+   // shows all the vocabulary data
         else {
             foreach ($taxtermsdata as $term) {
-
-                $term_res[] = array(
+                    $term_res[] = array(
                     'tid' => $term->tid->value,
                     'name' => $term->name->value,
                     'description' => $term->description->processed == NULL ? 'No description' : $term->description->processed,
@@ -128,22 +120,32 @@ class vocabcontroller extends ControllerBase
                 );
             }
 
-          
-
-            
-         
-            if (!$term_res) {
+           if (!$term_res) {
                 return get_error();
               }
 
             }  
 
-            if ($_GET['sort'] != NULL) $term_res = $this->sortBy($term_res, 'name');
 
 
 
+       
+        
 
-       //This is the table that is finally displayed as ouput in drupal website!
+
+    //SORTING condition that we are sorting our term_res array  on the basis of 'NAME' key.
+     if ($_GET['sort'] != NULL) $term_res = $this->sortBy($term_res, 'name');
+
+
+    //TABLE headers array is all heading titles of the resultant table that we are going to have.
+        $table_headers = array(
+            'tid' => 'Term ID',
+            'name' => 'Term Name',
+            'description' => ("Description"),
+            'vocabid' => "Vocabulary Name",
+        );
+
+     //This is the table that is finally displayed as ouput in drupal website!
         $res['table'] = [
             '#type' => 'table',
             '#title' => 'Taxonomy',
