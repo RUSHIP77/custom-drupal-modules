@@ -1,0 +1,26 @@
+<?php
+
+// Implementataion of hook_form_alter()
+
+
+// FUnction gives us the id of the form
+function hello_world_form_alter(&$form, &$form_state, $form_id){
+
+
+   
+    if($form_id =='demoform'){  
+
+        
+          $form['name'] = [
+            '#type' => 'textfield',
+             '#title' => ('new form title'),
+      
+          ];
+    }
+
+  
+}
+
+
+
+
