@@ -1,0 +1,17 @@
+api_data.bitcoin:
+  path: '/factsapo'
+  defaults:
+    _controller: 'Drupal\api_data\Controller\APIController::getFact'
+    _title: 'Bitcoin prices LIVE!'
+  requirements:
+    _access: 'TRUE'
+    _permission: 'access module data'
+
+
+ 
+
+
+
+
+
+

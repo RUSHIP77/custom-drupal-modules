@@ -1,0 +1,14 @@
+apiblockcss:
+  version: 1.x
+  css:
+    theme:
+      css/apiblock.css: {}
+
+apiblockjs:
+  version: 1.x
+  js:
+    js/apiblock.js: {}
+  dependencies:
+    - core/jquery
+
+

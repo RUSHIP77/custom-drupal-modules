@@ -1,0 +1,4 @@
+access module data:
+  title: 'Access Module Data'
+  description: 'Allows users to access the data fetched from the third-party API and displayed in the custom block.'
+  restrict access: true
